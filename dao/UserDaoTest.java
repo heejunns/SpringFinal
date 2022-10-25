@@ -10,8 +10,8 @@ class UserDaoTest {
 
     @Test
     void  addAndSelect(){
-        UserDao userDao = new UserDao();
-        String id = "39";
+        UserDao userDao = new UserDao(new AWSUserMaker());
+        String id = "100";
         userDao.add(new User(id,"hihi","123456"));
 
         User user = userDao.findById(id);

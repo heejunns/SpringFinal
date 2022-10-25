@@ -4,17 +4,26 @@ import java.sql.*;
 import java.util.Map;
 
 public class UserDao {
-    private Connection makeConnection() throws SQLException{
+    //AWSUserMaker awsUserMaker = new AWSUserMaker();
+   /* private Connection makeConnection() throws SQLException{
         Map<String, String> env = System.getenv();
         // DB접속 (ex sql workbeanch실행)
         Connection c = DriverManager.getConnection(env.get("DB_HOST"),
                 env.get("DB_USER"), env.get("DB_PASSWORD"));
         return c;
+    } */
+    private ConnectionMaker connectionMaker;
+
+    public UserDao(){
+        this.connectionMaker = new AWSUserMaker();
+    }
+    public UserDao(ConnectionMaker connectionMaker){
+        this.connectionMaker = connectionMaker;
     }
     public void add(User user) {
         try {
             // DB접속 (ex sql workbeanch실행)
-            Connection c = makeConnection();
+            Connection c = connectionMaker.makeConnection();
 
 
             // Query문 작성
@@ -29,15 +38,16 @@ public class UserDao {
             pstmt.close();
             c.close();
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     public User findById(String id) {
         try {
             // DB접속 (ex sql workbeanch실행)
-            Connection c = makeConnection();
+            Connection c = connectionMaker.makeConnection();
 
 
             // Query문 작성
@@ -56,7 +66,7 @@ public class UserDao {
 
             return user;
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
