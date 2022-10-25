@@ -5,10 +5,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
 
-public class LocalUserMaker implements ConnectionMaker {
+public class AwsConnectionMaker implements ConnectionMaker {
     public Connection makeConnection() throws SQLException  {
         Map<String, String> env = System.getenv();
-        Connection c = DriverManager.getConnection("jdbc:mysql://ec2-3-35-226-247.ap-northeast-2.compute.amazonaws.com/likelion-db", "root", "??????");
+        Connection c = DriverManager.getConnection(env.get("DB_HOST"),
+                env.get("DB_USER"), env.get("DB_PASSWORD"));
+
         return c;
     }
 }
